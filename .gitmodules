@@ -1,0 +1,3 @@
+[submodule "yggdrasil"]
+	path = yggdrasil
+	url = git@github.com:yashbek/yggdrasil.git
