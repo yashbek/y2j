@@ -35,14 +35,6 @@ func request_MainService_Ping_0(ctx context.Context, marshaler runtime.Marshaler
 	var protoReq PingRequest
 	var metadata runtime.ServerMetadata
 
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
 	msg, err := client.Ping(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
@@ -51,14 +43,6 @@ func request_MainService_Ping_0(ctx context.Context, marshaler runtime.Marshaler
 func local_request_MainService_Ping_0(ctx context.Context, marshaler runtime.Marshaler, server MainServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq PingRequest
 	var metadata runtime.ServerMetadata
-
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
 
 	msg, err := server.Ping(ctx, &protoReq)
 	return msg, metadata, err
@@ -71,7 +55,7 @@ func local_request_MainService_Ping_0(ctx context.Context, marshaler runtime.Mar
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterMainServiceHandlerFromEndpoint instead.
 func RegisterMainServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server MainServiceServer) error {
 
-	mux.Handle("POST", pattern_MainService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_MainService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -137,7 +121,7 @@ func RegisterMainServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn
 // "MainServiceClient" to call the correct interceptors.
 func RegisterMainServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client MainServiceClient) error {
 
-	mux.Handle("POST", pattern_MainService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_MainService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
