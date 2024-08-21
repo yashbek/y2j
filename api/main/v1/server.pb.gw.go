@@ -63,7 +63,7 @@ func RegisterMainServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/main.v1.MainService/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/main.v1.MainService/Ping", runtime.WithHTTPPathPattern("/pingme"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -127,7 +127,7 @@ func RegisterMainServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/main.v1.MainService/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/main.v1.MainService/Ping", runtime.WithHTTPPathPattern("/pingme"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -147,7 +147,7 @@ func RegisterMainServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_MainService_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
+	pattern_MainService_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"pingme"}, ""))
 )
 
 var (
