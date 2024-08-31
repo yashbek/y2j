@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MainService_Ping_FullMethodName = "/main.v1.MainService/Ping"
+	MainService_Ping_FullMethodName    = "/main.v1.MainService/Ping"
+	MainService_QueueUp_FullMethodName = "/main.v1.MainService/QueueUp"
 )
 
 // MainServiceClient is the client API for MainService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MainServiceClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	QueueUp(ctx context.Context, in *QueueUpRequest, opts ...grpc.CallOption) (*QueueUpResponse, error)
 }
 
 type mainServiceClient struct {
@@ -46,11 +48,21 @@ func (c *mainServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...g
 	return out, nil
 }
 
+func (c *mainServiceClient) QueueUp(ctx context.Context, in *QueueUpRequest, opts ...grpc.CallOption) (*QueueUpResponse, error) {
+	out := new(QueueUpResponse)
+	err := c.cc.Invoke(ctx, MainService_QueueUp_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MainServiceServer is the server API for MainService service.
 // All implementations must embed UnimplementedMainServiceServer
 // for forward compatibility
 type MainServiceServer interface {
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	QueueUp(context.Context, *QueueUpRequest) (*QueueUpResponse, error)
 	mustEmbedUnimplementedMainServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedMainServiceServer struct {
 
 func (UnimplementedMainServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
+func (UnimplementedMainServiceServer) QueueUp(context.Context, *QueueUpRequest) (*QueueUpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueueUp not implemented")
 }
 func (UnimplementedMainServiceServer) mustEmbedUnimplementedMainServiceServer() {}
 
@@ -92,6 +107,24 @@ func _MainService_Ping_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MainService_QueueUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueueUpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MainServiceServer).QueueUp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MainService_QueueUp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MainServiceServer).QueueUp(ctx, req.(*QueueUpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MainService_ServiceDesc is the grpc.ServiceDesc for MainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var MainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Ping",
 			Handler:    _MainService_Ping_Handler,
+		},
+		{
+			MethodName: "QueueUp",
+			Handler:    _MainService_QueueUp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
