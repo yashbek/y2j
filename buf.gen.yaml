@@ -1,18 +1,21 @@
-version: v1
+version: v2
 managed:
   enabled: true
-  go_package_prefix:
-    default: github.com/yashbek/y2j/api
-    except:
-      - buf.build/googleapis/googleapis
-      - buf.build/bufbuild/protovalidate
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+    - file_option: go_package
+      module: buf.build/bufbuild/protovalidate
+  override:
+    - file_option: go_package_prefix
+      value: github.com/yashbek/y2j/api
 plugins:
-  - plugin: buf.build/protocolbuffers/go:v1.31.0
+  - remote: buf.build/protocolbuffers/go:v1.31.0
     out: ./api
     opt: module=github.com/yashbek/y2j/api
-  - plugin: buf.build/grpc/go:v1.3.0
+  - remote: buf.build/grpc/go:v1.3.0
     out: ./api
     opt: module=github.com/yashbek/y2j/api
-  - plugin: buf.build/grpc-ecosystem/gateway:v2.16.0
+  - remote: buf.build/grpc-ecosystem/gateway:v2.16.0
     out: ./api
     opt: module=github.com/yashbek/y2j/api
