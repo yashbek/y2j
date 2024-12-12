@@ -21,8 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	MainService_Ping_FullMethodName    = "/main.v1.MainService/Ping"
 	MainService_QueueUp_FullMethodName = "/main.v1.MainService/QueueUp"
-	MainService_SignUp_FullMethodName  = "/main.v1.MainService/SignUp"
-	MainService_Login_FullMethodName   = "/main.v1.MainService/Login"
 )
 
 // MainServiceClient is the client API for MainService service.
@@ -31,8 +29,6 @@ const (
 type MainServiceClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	QueueUp(ctx context.Context, in *QueueUpRequest, opts ...grpc.CallOption) (*QueueUpResponse, error)
-	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
 type mainServiceClient struct {
@@ -61,32 +57,12 @@ func (c *mainServiceClient) QueueUp(ctx context.Context, in *QueueUpRequest, opt
 	return out, nil
 }
 
-func (c *mainServiceClient) SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error) {
-	out := new(SignUpResponse)
-	err := c.cc.Invoke(ctx, MainService_SignUp_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *mainServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, MainService_Login_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MainServiceServer is the server API for MainService service.
 // All implementations must embed UnimplementedMainServiceServer
 // for forward compatibility
 type MainServiceServer interface {
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	QueueUp(context.Context, *QueueUpRequest) (*QueueUpResponse, error)
-	SignUp(context.Context, *SignUpRequest) (*SignUpResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	mustEmbedUnimplementedMainServiceServer()
 }
 
@@ -99,12 +75,6 @@ func (UnimplementedMainServiceServer) Ping(context.Context, *PingRequest) (*Ping
 }
 func (UnimplementedMainServiceServer) QueueUp(context.Context, *QueueUpRequest) (*QueueUpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueueUp not implemented")
-}
-func (UnimplementedMainServiceServer) SignUp(context.Context, *SignUpRequest) (*SignUpResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SignUp not implemented")
-}
-func (UnimplementedMainServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedMainServiceServer) mustEmbedUnimplementedMainServiceServer() {}
 
@@ -155,42 +125,6 @@ func _MainService_QueueUp_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MainService_SignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignUpRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MainServiceServer).SignUp(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MainService_SignUp_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MainServiceServer).SignUp(ctx, req.(*SignUpRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MainService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MainServiceServer).Login(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MainService_Login_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MainServiceServer).Login(ctx, req.(*LoginRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // MainService_ServiceDesc is the grpc.ServiceDesc for MainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -205,14 +139,6 @@ var MainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueueUp",
 			Handler:    _MainService_QueueUp_Handler,
-		},
-		{
-			MethodName: "SignUp",
-			Handler:    _MainService_SignUp_Handler,
-		},
-		{
-			MethodName: "Login",
-			Handler:    _MainService_Login_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
