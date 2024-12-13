@@ -98,7 +98,7 @@ func RegisterMainServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_MainService_QueueUp_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_MainService_QueueUp_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -106,7 +106,7 @@ func RegisterMainServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/main.v1.MainService/QueueUp", runtime.WithHTTPPathPattern("/queue"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/main.v1.MainService/QueueUp", runtime.WithHTTPPathPattern("/queueup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -186,13 +186,13 @@ func RegisterMainServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_MainService_QueueUp_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_MainService_QueueUp_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/main.v1.MainService/QueueUp", runtime.WithHTTPPathPattern("/queue"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/main.v1.MainService/QueueUp", runtime.WithHTTPPathPattern("/queueup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -214,7 +214,7 @@ func RegisterMainServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_MainService_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"pingme"}, ""))
 
-	pattern_MainService_QueueUp_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"queue"}, ""))
+	pattern_MainService_QueueUp_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"queueup"}, ""))
 )
 
 var (
